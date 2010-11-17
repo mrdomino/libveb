@@ -1,0 +1,122 @@
+.TH VEB 3
+.SH NAME
+Veb, vebnew, vebsize, vebput, vebdel, vebsucc, vebpred
+\- Van Emde Boas tree structure for efficient storing and traversal of integer sets over a fixed universe of elements.
+.SH SYNOPSIS
+.B #include <veb.h>
+.br
+.PP
+.B typedef unsigned char uchar;
+.br
+.B typedef unsigned int uint;
+.br
+.B typedef struct Veb Veb;
+.br
+.PP
+.B struct Veb
+.br
+.B {
+.br
+.B 	uchar *D;
+.br
+.B 	uint k;
+.br
+.B 	uint M;
+.br
+.B };
+.br
+.PP
+.B uint vebsize(uint M);
+.br
+.B Veb vebnew(uint M, int full);
+.br
+.B void vebdel(Veb T, uint n);
+.br
+.B void vebput(Veb T, uint n);
+.br
+.B uint vebsucc(Veb T, uint n);
+.br
+.B uint vebpred(Veb T, uint n);
+.br
+.SH DESCRIPTION
+Van Emde Boas tree is a tree data structure that can store a set on a universe of size
+.I M,
+such that operations on the set can be performed in time
+.I O(log(log(M))).
+However, the structure consumes a fixed size in memory of the order
+.I O(M).
+.PP
+.I Vebsize
+returns the size of the data structure in bytes. This is a recursive function:
+.I S(M) = O(1) + (sqrt(M)+1)S(sqrt(M)).
+The size for
+.I M
+less than or equal to the machine word size return the number of bits in a word.
+.PP
+.I Vebnew
+allocates memory for a new tree of size
+.I M
+and if the argument
+.I full
+is true the structure is initialised to a full set otherwise it is initially empty.
+.PP
+.I Vebput
+inserts the element
+.I n
+into the structure
+.I T
+and likewise
+.I vebdel
+removes it.
+.PP
+.I Vebsucc
+is the successor function on the structure
+.I T.
+It returns the element
+.I n
+if
+.I n
+is in the set, and the smallest element,
+.I m
+such that
+.I m > n
+if
+.I n
+was not contained in
+.I T.
+In case there is no such element
+.I m
+.I vebsucc
+returns
+.I T.M,
+the number of elements contained in
+.I T.
+.PP
+.I Vebpred
+is the complementing predecessor function returning the element
+.I n
+if
+.I n
+is in the set, and the largest element,
+.I m
+such that
+.I m < n
+if
+.I n
+was not contained in
+.I T
+and
+.I T.M
+if no such element can be found.
+.PP
+Freeing the allocated memory of a structure
+.I T
+can be done by simply freeing
+.I T.D.
+.PP
+The convenience of this implementation is that the structure can be stored on disk by simply writing
+.I T.D.
+The size of the structure is also constant and thus there is no need for reallocating space as the set is changed.
+.SH REFERENCES
+.B Peter van Emde Boas, R. Kaas, and E. Zijlstra,
+Design and Implementation of an Efficient Priority Queue (Mathematical Systems Theory 10: 99-127, 1977)

@@ -1,0 +1,44 @@
+The unit tests here use the Plan 9 philosophy insipred model. The unit
+test library used is included here in its entirety in 9unit.h.  A
+single test is written in its own .c file. A unit test is executed as
+a unix executable and a return value zero is a passed test and
+non-zero return value indicates a failure. The provided unit test
+library only has one macro, test, which exits on value one if the
+argument is non-zero and writes the file and linenumber to stderr.
+
+
+BUILDING
+
+The build framework uses the Plan 9 port mk. The mkfile in this
+directory is written so that it builds all .c files and recurses all
+subdirectories of this directory. The mkfiles in the subdirectories
+only include the mkfile in this directory. This requires setting the
+variable BASE to this directory. If your shell is RC you can do so by
+running mkconfig. In bash this can be achieved with: 
+
+$ export BASE=`pwd`
+
+
+RUNNING
+
+Tests can be run with the RC script 'check'. The script assumes that
+rc is installed in /usr/local/bin. If rc is installed elsewhere either
+change the first line or add a link to /usr/local/bin to point to the
+correct location.
+
+SYNOPSIS	CHECK
+
+check [-r] [-c] files
+
+Check runs all files in turn and produces an output to stdout
+'pass\tfile\n', if executing file resulted in exit status 0 and
+'FAIL\tfile\n' if the exit status was non-zero.
+
+OPTIONS
+
+	-r	Recursivily run tests in all subdirectories printing
+		the directory path first followed by call to check on
+		the contents.
+	-c	Runs valgrind -q on the argument [1].
+
+[1] http://valgrind.org

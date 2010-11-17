@@ -1,0 +1,63 @@
+VAN EMDE BOAS TREE IMPLEMENTATION FOR BLOCK DEVICE STORAGE
+
+This software provides an implementation of van Emde Boas tree
+structures which can be stored on block devices. The whole structure
+is stored in a single byte-array as efficiently as possible without
+trying to mangle individual bytes.
+
+Van Emde Boas trees can be optimised by only allocating space for
+non-empty subtrees. However, this leads to a Trie data structure and
+thus if space optimisation is needed Trie is a better choise. Also, if
+we were to do this optimisation the data would not be of constant size
+and ultimately a large set would take more memory than this
+implementation.
+
+This implementation relies on instructions on 2s-complement
+architectures.  This encompasses the most computers in use today but
+might be limiting in some esoteric cases. GCC provides builtin
+functions which we use here [1]:
+
+int __builtin_ffs(uint);
+int __builtin_clz(uint);
+int __builtin_ctz(uint);
+
+__builtin_clz, count-leading-zeros, returns the number of leading
+0-bits in x, starting at the most significant bit position. If x is 0,
+the result is undefined.
+
+__builtin_ctz, count-trailing-zeros, returns the number of trailing
+0-bits in x, starting at the least significant bit position. If x is
+0, the result is undefined.
+
+__builtin_ffs, find-first-set, returns one plus the index of the least
+significant 1-bit of x, or if x is zero, returns zero.
+
+GCC does not provide the complementing fls, find-last-set, function,
+which we actually need to compute the number of bits required to
+represent a number. We can implement this by subtracting clz(x) from
+the word size in bits. If this implementation is ported to a platform
+using a different compiler the functions clz and ctz in mach.c need to
+be provided. For reference an alternate mach.c not relying on GCC
+builtins can be found from the directory alt.
+
+
+BUILDING
+
+The code relies, besides the aforementioned builtins, stdlib.h for the
+function malloc. The provided mkfile is written for Plan 9 mk which is
+provided on other platforms by the Plan 9 Ports [2]. The environment
+variables needed to install are in mkconfig. If Plan9port is available
+to get the library compiled and, optionally installed, use 'mk
+[install]'.
+
+Unit tests can be found from the directory ut. The associated mkfile
+is contained withing as is the documentation of them.
+
+A Unix manual page is in the directory man. This also provides the
+documentation for the provided functions.
+
+
+REFERENCES
+
+[1] http://gcc.gnu.org
+[2] http://swtch.com/plan9port
