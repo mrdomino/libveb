@@ -46,6 +46,10 @@ such that operations on the set can be performed in time
 However, the structure consumes a fixed size in memory of the order
 .I O(M).
 .PP
+The struct
+.I Veb
+holds a pointer to the byte array, D, holding the actual van Emde Boas Tree, the number of elements, M, it can hold and, for implementation convenience, the number of bits, k, needed to represent the largest element. Note that the size of D is vebsize(M), see below.
+.PP
 .I Vebsize
 returns the size of the data structure in bytes. This is a recursive function:
 .I S(M) = O(1) + (sqrt(M)+1)S(sqrt(M)).
@@ -107,7 +111,13 @@ was not contained in
 .I T
 and
 .I T.M
-if no such element can be found.
+if no such element can be found, or
+.I x >= T.M.
+This last constraint makes iteration over the boundary work in a symmetrical
+fashion with both
+.I vebsucc
+and
+.I vebpred.
 .PP
 Freeing the allocated memory of a structure
 .I T

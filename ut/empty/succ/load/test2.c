@@ -8,8 +8,8 @@ fill(Veb T, uint m)
 	uint n = 0;
 	for (int i = 0; i < m; ++i) {
 		uint x = rand()%T.M;
-		if (vebsucc(T, x) != x) {
-			vebput(T, x);
+		if (vebsucc(T,x) != x) {
+			vebput(T,x);
 			++n;
 		}
 	}
@@ -20,14 +20,14 @@ int
 main(void)
 {
 	srand(83843);
-	uint M = rand()%(1 << 16);
-	Veb T = vebnew(M, 0);
-	uint m = fill(T, 10);
+	uint M = rand()%(1<<16);
+	Veb T = vebnew(M,0);
+	uint m = fill(T,1000);
 	uint n = 0;
-	uint i = vebsucc(T, 0);
+	uint i = vebsucc(T,0);
 	while (i != M) {
 		++n;
-		i = vebsucc(T, i+1);
+		i = vebsucc(T,i+1);
 	}
 	test(n == m);
 	free(T.D);

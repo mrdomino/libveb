@@ -8,8 +8,8 @@ reduce(Veb T, uint m)
 	uint n = 0;
 	for (int i = 0; i < m; ++i) {
 		uint x = rand()%T.M;
-		if (vebpred(T, x) == x) {
-			vebdel(T, x);
+		if (vebpred(T,x) == x) {
+			vebdel(T,x);
 			++n;
 		}
 	}
@@ -20,16 +20,14 @@ int
 main(void)
 {
 	srand(83843);
-	uint M = rand()%(1 << 8);
-	Veb T = vebnew(M, 1);
-	uint m = reduce(T, 10);
+	uint M = rand()%(1<<16);
+	Veb T = vebnew(M,1);
+	uint m = reduce(T,1000);
 	uint n = 0;
-	uint i = vebpred(T, M);
+	uint i = vebpred(T,M-1);
 	while (i != M) {
 		++n;
-		if (i == 0)
-			break;
-		i = vebpred(T, i-1);
+		i = vebpred(T,i-1);
 	}
 	test(n == M-m);
 	free(T.D);

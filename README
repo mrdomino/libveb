@@ -50,11 +50,22 @@ variables needed to install are in mkconfig. If Plan9port is available
 to get the library compiled and, optionally installed, use 'mk
 [install]'.
 
+
+TESTING
+
 Unit tests can be found from the directory ut. The associated mkfile
 is contained withing as is the documentation of them.
 
+
+DOCUMENTATION
+
 A Unix manual page is in the directory man. This also provides the
 documentation for the provided functions.
+
+
+CONTACT
+
+Jani Lahtinen <jani.lahtinen8@gmail.com>
 
 
 REFERENCES
