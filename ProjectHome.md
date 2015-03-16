@@ -1,0 +1,1 @@
+This software provides an implementation of van Emde Boas tree structures which can be stored on block devices. The whole structure is stored in a single byte-array as efficiently as possible without trying to mangle individual bytes.
